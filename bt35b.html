@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bài tập 35b - Đồng hồ đếm ngược | Lê Thái Bình - 241A010692</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        body {
+            background-color: #f1f5f9;
+            color: #0f172a;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+        header {
+            background: linear-gradient(135deg, #0f172a 0%, #1e3a8a 100%);
+            color: #ffffff;
+            text-align: center;
+            padding: 24px 16px;
+        }
+        header h1 {
+            font-size: 24px;
+            margin-bottom: 6px;
+        }
+        header p {
+            color: #cbd5e1;
+            font-size: 14px;
+        }
+        .badge {
+            display: inline-block;
+            margin-top: 10px;
+            padding: 4px 14px;
+            background-color: rgba(56, 189, 248, 0.18);
+            border: 1px solid #38bdf8;
+            border-radius: 999px;
+            color: #7dd3fc;
+            font-weight: 600;
+            font-size: 13px;
+        }
+        main {
+            flex: 1;
+            width: 100%;
+            max-width: 560px;
+            margin: 32px auto;
+            padding: 0 16px;
+        }
+        .timer-card {
+            background-color: #ffffff;
+            border: 2px solid #e2e8f0;
+            border-radius: 16px;
+            padding: 32px 24px;
+            text-align: center;
+            box-shadow: 0 10px 28px rgba(15, 23, 42, 0.08);
+            transition: border-color 0.3s ease, box-shadow 0.3s ease;
+        }
+        .timer-card.under-one-minute {
+            border-color: #ef4444;
+            animation: cardPulse 1s infinite ease-in-out;
+        }
+        @keyframes cardPulse {
+            0%, 100% {
+                box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.35);
+                transform: scale(1);
+            }
+            50% {
+                box-shadow: 0 0 24px 6px rgba(239, 68, 68, 0.45);
+                transform: scale(1.015);
+            }
+        }
+        .status-label {
+            display: inline-block;
+            padding: 5px 14px;
+            border-radius: 999px;
+            font-size: 13px;
+            font-weight: 700;
+            background-color: #e0f2fe;
+            color: #0369a1;
+            margin-bottom: 18px;
+        }
+        .timer-card.under-one-minute .status-label {
+            background-color: #fee2e2;
+            color: #b91c1c;
+        }
+        .time-display {
+            font-size: 76px;
+            font-weight: 800;
+            letter-spacing: 4px;
+            color: #0f172a;
+            font-variant-numeric: tabular-nums;
+            margin: 10px 0 20px;
+            transition: color 0.3s ease;
+        }
+        .timer-card.under-one-minute .time-display {
+            color: #dc2626;
+            animation: textBlink 1s infinite;
+        }
+        @keyframes textBlink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.55; }
+        }
+        .progress-track {
+            width: 100%;
+            height: 10px;
+            background-color: #e2e8f0;
+            border-radius: 999px;
+            overflow: hidden;
+            margin-bottom: 24px;
+        }
+        .progress-fill {
+            height: 100%;
+            width: 100%;
+            background: linear-gradient(90deg, #0284c7, #38bdf8);
+            transition: width 0.4s linear, background 0.3s ease;
+        }
+        .timer-card.under-one-minute .progress-fill {
+            background: linear-gradient(90deg, #dc2626, #f87171);
+        }
+        .controls {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 16px;
+        }
+        .btn {
+            padding: 11px 20px;
+            border: none;
+            border-radius: 8px;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.2s, transform 0.15s;
+        }
+        .btn:active {
+            transform: scale(0.98);
+        }
+        .btn-start {
+            background-color: #16a34a;
+            color: #ffffff;
+        }
+        .btn-start:hover {
+            background-color: #15803d;
+        }
+        .btn-pause {
+            background-color: #f59e0b;
+            color: #ffffff;
+        }
+        .btn-pause:hover {
+            background-color: #d97706;
+        }
+        .btn-reset {
+            background-color: #0284c7;
+            color: #ffffff;
+        }
+        .btn-reset:hover {
+            background-color: #0369a1;
+        }
+        .quick-test {
+            border-top: 1px solid #e2e8f0;
+            padding-top: 14px;
+            margin-top: 8px;
+            font-size: 13px;
+            color: #64748b;
+        }
+        .quick-test button {
+            margin-top: 8px;
+            padding: 6px 12px;
+            font-size: 13px;
+            background-color: #e2e8f0;
+            color: #1e293b;
+            border: none;
+            border-radius: 6px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+        .quick-test button:hover {
+            background-color: #cbd5e1;
+        }
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background-color: rgba(15, 23, 42, 0.72);
+            justify-content: center;
+            align-items: center;
+            padding: 16px;
+            z-index: 1000;
+        }
+        .modal-overlay.show {
+            display: flex;
+            animation: fadeIn 0.25s ease;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        .modal-box {
+            background-color: #ffffff;
+            border-radius: 14px;
+            max-width: 400px;
+            width: 100%;
+            padding: 28px 24px;
+            text-align: center;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.25);
+            border-top: 6px solid #dc2626;
+        }
+        .modal-box h2 {
+            color: #dc2626;
+            font-size: 24px;
+            margin-bottom: 10px;
+        }
+        .modal-box p {
+            color: #334155;
+            font-size: 15px;
+            margin-bottom: 20px;
+            line-height: 1.5;
+        }
+        footer {
+            text-align: center;
+            padding: 18px;
+            background-color: #0f172a;
+            color: #94a3b8;
+            font-size: 13px;
+            margin-top: auto;
+        }
+        @media (max-width: 480px) {
+            .time-display {
+                font-size: 56px;
+            }
+        }
+    
+        .top-nav {
+            width: 100%;
+            background-color: #1e3a8a;
+            padding: 10px 12px;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 10px;
+        }
+        .top-nav a {
+            color: #ffffff;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 600;
+            padding: 6px 12px;
+            border-radius: 6px;
+            background-color: rgba(255, 255, 255, 0.12);
+        }
+        .top-nav a:hover, .top-nav a.active {
+            background-color: #0284c7;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>BÀI TẬP 35B - ĐỒNG HỒ ĐẾM NGƯỢC (10 PHÚT)</h1>
+        <p>JavaScript setInterval &bull; CSS Animation dưới 1 phút &bull; Modal Alert</p>
+        <div class="badge">Sinh viên: Lê Thái Bình | MSSV: 241A010692</div>
+    </header>
+    <nav class="top-nav">
+        <a href="index.html">Trang chủ</a>
+        <a href="241A010692_bt36.html">Bài tập 36</a>
+        <a href="bt34.html">Bài tập 34</a>
+        <a href="bt35.html">Bài tập 35</a>
+        <a href="bt35a.html">Bài tập 35a</a>
+        <a href="bt35b.html" class="active">Bài tập 35b</a>
+        <a href="cauhoi8.html">Câu hỏi 8</a>
+    </nav>
+
+    <main>
+        <section id="timerCard" class="timer-card">
+            <div id="statusLabel" class="status-label">Sẵn sàng đếm ngược 10 phút</div>
+            <div id="timeDisplay" class="time-display">10:00</div>
+
+            <div class="progress-track">
+                <div id="progressFill" class="progress-fill"></div>
+            </div>
+
+            <div class="controls">
+                <button type="button" id="startBtn" class="btn btn-start">Bắt đầu</button>
+                <button type="button" id="pauseBtn" class="btn btn-pause">Tạm dừng</button>
+                <button type="button" id="resetBtn" class="btn btn-reset">Đặt lại (10:00)</button>
+            </div>
+
+            <div class="quick-test">
+                <span>Kiểm tra nhanh hiệu ứng dưới 1 phút &amp; Modal Alert:</span><br>
+                <button type="button" id="testMinuteBtn">Chạy thử từ 00:59</button>
+                <button type="button" id="testEndBtn">Chạy thử từ 00:05</button>
+            </div>
+        </section>
+    </main>
+
+    <div id="alertModal" class="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+        <div class="modal-box">
+            <h2 id="modalTitle">Hết thời gian!</h2>
+            <p>Đồng hồ đếm ngược đã kết thúc (00:00).<br>Sinh viên: <strong>Lê Thái Bình</strong> (MSSV: <strong>241A010692</strong>)</p>
+            <button type="button" id="closeModalBtn" class="btn btn-reset">Đóng &amp; Đặt lại 10:00</button>
+        </div>
+    </div>
+
+    <footer>
+        Lê Thái Bình &bull; MSSV: 241A010692 &bull; Học phần Lập trình Web
+    </footer>
+
+    <script>
+        const TOTAL_SECONDS = 600;
+        let remainingSeconds = TOTAL_SECONDS;
+        let intervalId = null;
+        let targetEndTime = null;
+
+        const timerCard = document.getElementById("timerCard");
+        const statusLabel = document.getElementById("statusLabel");
+        const timeDisplay = document.getElementById("timeDisplay");
+        const progressFill = document.getElementById("progressFill");
+        const startBtn = document.getElementById("startBtn");
+        const pauseBtn = document.getElementById("pauseBtn");
+        const resetBtn = document.getElementById("resetBtn");
+        const testMinuteBtn = document.getElementById("testMinuteBtn");
+        const testEndBtn = document.getElementById("testEndBtn");
+        const alertModal = document.getElementById("alertModal");
+        const closeModalBtn = document.getElementById("closeModalBtn");
+
+        function formatMMSS(totalSec) {
+            const minutes = Math.floor(totalSec / 60);
+            const seconds = totalSec % 60;
+            return String(minutes).padStart(2, "0") + ":" + String(seconds).padStart(2, "0");
+        }
+
+        function stopTimerInterval() {
+            if (intervalId !== null) {
+                clearInterval(intervalId);
+                intervalId = null;
+            }
+        }
+
+        function updateUI() {
+            timeDisplay.textContent = formatMMSS(remainingSeconds);
+            const percent = Math.max(0, Math.min(100, (remainingSeconds / TOTAL_SECONDS) * 100));
+            progressFill.style.width = percent + "%";
+
+            if (remainingSeconds > 0 && remainingSeconds < 60) {
+                timerCard.classList.add("under-one-minute");
+                statusLabel.textContent = "Cảnh báo: Thời gian còn dưới 1 phút!";
+            } else {
+                timerCard.classList.remove("under-one-minute");
+                if (remainingSeconds === 0) {
+                    statusLabel.textContent = "Đã hết thời gian!";
+                } else if (intervalId !== null) {
+                    statusLabel.textContent = "Đang đếm ngược...";
+                } else {
+                    statusLabel.textContent = "Sẵn sàng đếm ngược 10 phút";
+                }
+            }
+        }
+
+        function startTimer() {
+            if (intervalId !== null) return;
+            if (remainingSeconds <= 0) {
+                remainingSeconds = TOTAL_SECONDS;
+            }
+
+            targetEndTime = Date.now() + remainingSeconds * 1000;
+            updateUI();
+
+            intervalId = setInterval(function () {
+                const diffMs = targetEndTime - Date.now();
+                remainingSeconds = Math.max(0, Math.ceil(diffMs / 1000));
+                updateUI();
+
+                if (remainingSeconds <= 0) {
+                    stopTimerInterval();
+                    alertModal.classList.add("show");
+                }
+            }, 250);
+        }
+
+        function pauseTimer() {
+            stopTimerInterval();
+            if (remainingSeconds > 0 && remainingSeconds >= 60) {
+                statusLabel.textContent = "Đã tạm dừng";
+            }
+        }
+
+        function resetTimer(secondsValue) {
+            stopTimerInterval();
+            remainingSeconds = typeof secondsValue === "number" ? secondsValue : TOTAL_SECONDS;
+            alertModal.classList.remove("show");
+            updateUI();
+        }
+
+        startBtn.addEventListener("click", startTimer);
+        pauseBtn.addEventListener("click", pauseTimer);
+        resetBtn.addEventListener("click", function () {
+            resetTimer(TOTAL_SECONDS);
+        });
+
+        testMinuteBtn.addEventListener("click", function () {
+            resetTimer(59);
+            startTimer();
+        });
+
+        testEndBtn.addEventListener("click", function () {
+            resetTimer(5);
+            startTimer();
+        });
+
+        closeModalBtn.addEventListener("click", function () {
+            resetTimer(TOTAL_SECONDS);
+        });
+
+        window.addEventListener("beforeunload", stopTimerInterval);
+
+        updateUI();
+    </script>
+</body>
+</html>

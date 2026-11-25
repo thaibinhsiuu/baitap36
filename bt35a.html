@@ -1,0 +1,505 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bài tập 35a - Form Đăng Ký | Lê Thái Bình - 241A010692</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        body {
+            background-color: #f1f5f9;
+            color: #0f172a;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+        header {
+            background: linear-gradient(135deg, #0f172a 0%, #1e3a8a 100%);
+            color: #ffffff;
+            text-align: center;
+            padding: 24px 16px;
+        }
+        header h1 {
+            font-size: 24px;
+            margin-bottom: 6px;
+        }
+        header p {
+            color: #cbd5e1;
+            font-size: 14px;
+        }
+        .badge {
+            display: inline-block;
+            margin-top: 10px;
+            padding: 4px 14px;
+            background-color: rgba(56, 189, 248, 0.18);
+            border: 1px solid #38bdf8;
+            border-radius: 999px;
+            color: #7dd3fc;
+            font-weight: 600;
+            font-size: 13px;
+        }
+        main {
+            flex: 1;
+            width: 100%;
+            max-width: 520px;
+            margin: 28px auto;
+            padding: 0 16px;
+        }
+        .form-card {
+            background-color: #ffffff;
+            border: 1px solid #e2e8f0;
+            border-radius: 14px;
+            padding: 28px 24px;
+            box-shadow: 0 8px 24px rgba(15, 23, 42, 0.08);
+        }
+        .form-card h2 {
+            font-size: 20px;
+            color: #0f172a;
+            margin-bottom: 6px;
+            text-align: center;
+        }
+        .form-subtitle {
+            font-size: 14px;
+            color: #64748b;
+            text-align: center;
+            margin-bottom: 22px;
+        }
+        .form-group {
+            margin-bottom: 16px;
+        }
+        .form-group label {
+            display: block;
+            font-size: 14px;
+            font-weight: 600;
+            color: #1e293b;
+            margin-bottom: 6px;
+        }
+        .input-wrapper {
+            position: relative;
+            display: flex;
+            align-items: center;
+        }
+        .form-control {
+            width: 100%;
+            padding: 11px 14px;
+            border: 1.5px solid #cbd5e1;
+            border-radius: 8px;
+            font-size: 15px;
+            color: #0f172a;
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
+        .form-control:focus {
+            outline: none;
+            border-color: #0284c7;
+            box-shadow: 0 0 0 3px rgba(2, 132, 199, 0.15);
+        }
+        .form-control.invalid {
+            border-color: #dc2626;
+        }
+        .form-control.valid {
+            border-color: #16a34a;
+        }
+        .toggle-pass {
+            position: absolute;
+            right: 10px;
+            background: #e2e8f0;
+            border: none;
+            border-radius: 6px;
+            padding: 5px 10px;
+            font-size: 12px;
+            font-weight: 600;
+            color: #334155;
+            cursor: pointer;
+        }
+        .toggle-pass:hover {
+            background: #cbd5e1;
+        }
+        .error-text {
+            display: block;
+            min-height: 18px;
+            font-size: 13px;
+            color: #dc2626;
+            margin-top: 4px;
+            font-weight: 500;
+        }
+        .pass-rules {
+            background-color: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            padding: 10px 14px;
+            margin-top: 6px;
+            font-size: 13px;
+            color: #475569;
+        }
+        .pass-rules ul {
+            list-style: none;
+            margin-top: 4px;
+        }
+        .pass-rules li {
+            margin: 3px 0;
+        }
+        .pass-rules li.ok {
+            color: #16a34a;
+            font-weight: 600;
+        }
+        .checkbox-group {
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            margin-bottom: 6px;
+        }
+        .checkbox-group input[type="checkbox"] {
+            width: 18px;
+            height: 18px;
+            margin-top: 2px;
+            accent-color: #0284c7;
+            cursor: pointer;
+        }
+        .checkbox-group label {
+            font-size: 14px;
+            color: #334155;
+            cursor: pointer;
+            user-select: none;
+        }
+        .btn-submit {
+            width: 100%;
+            padding: 12px;
+            background-color: #0284c7;
+            color: #ffffff;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 700;
+            cursor: pointer;
+            margin-top: 8px;
+            transition: background-color 0.2s;
+        }
+        .btn-submit:hover {
+            background-color: #0369a1;
+        }
+        .success-box {
+            display: none;
+            margin-top: 18px;
+            padding: 14px 16px;
+            background-color: #ecfdf5;
+            border: 1.5px solid #10b981;
+            border-radius: 10px;
+            color: #065f46;
+            font-size: 14px;
+        }
+        .success-box strong {
+            display: block;
+            font-size: 15px;
+            margin-bottom: 4px;
+        }
+        .storage-preview {
+            margin-top: 20px;
+            background-color: #ffffff;
+            border: 1px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 16px 20px;
+            box-shadow: 0 4px 12px rgba(15, 23, 42, 0.05);
+        }
+        .storage-preview h3 {
+            font-size: 15px;
+            color: #0f172a;
+            margin-bottom: 8px;
+        }
+        .storage-list {
+            list-style: none;
+            font-size: 13px;
+            color: #334155;
+        }
+        .storage-list li {
+            padding: 8px 10px;
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 6px;
+            margin-bottom: 6px;
+            word-break: break-all;
+        }
+        footer {
+            text-align: center;
+            padding: 18px;
+            background-color: #0f172a;
+            color: #94a3b8;
+            font-size: 13px;
+            margin-top: 24px;
+        }
+        @media (max-width: 480px) {
+            .form-card {
+                padding: 20px 16px;
+            }
+            header h1 {
+                font-size: 20px;
+            }
+        }
+    
+        .top-nav {
+            width: 100%;
+            background-color: #1e3a8a;
+            padding: 10px 12px;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 10px;
+        }
+        .top-nav a {
+            color: #ffffff;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 600;
+            padding: 6px 12px;
+            border-radius: 6px;
+            background-color: rgba(255, 255, 255, 0.12);
+        }
+        .top-nav a:hover, .top-nav a.active {
+            background-color: #0284c7;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>BÀI TẬP 35A - FORM ĐĂNG KÝ NGƯỜI DÙNG</h1>
+        <p>Validation JavaScript &bull; Lưu trữ LocalStorage &bull; Responsive CSS</p>
+        <div class="badge">Sinh viên: Lê Thái Bình | MSSV: 241A010692</div>
+    </header>
+    <nav class="top-nav">
+        <a href="index.html">Trang chủ</a>
+        <a href="241A010692_bt36.html">Bài tập 36</a>
+        <a href="bt34.html">Bài tập 34</a>
+        <a href="bt35.html">Bài tập 35</a>
+        <a href="bt35a.html" class="active">Bài tập 35a</a>
+        <a href="bt35b.html">Bài tập 35b</a>
+        <a href="cauhoi8.html">Câu hỏi 8</a>
+    </nav>
+
+    <main>
+        <section class="form-card">
+            <h2>Đăng ký tài khoản</h2>
+            <p class="form-subtitle">Vui lòng điền đầy đủ thông tin bên dưới</p>
+
+            <form id="registerForm" novalidate>
+                <div class="form-group">
+                    <label for="fullName">Họ và tên:</label>
+                    <input type="text" id="fullName" class="form-control" maxlength="80" placeholder="Ví dụ: Lê Thái Bình" required>
+                    <span class="error-text" id="nameError"></span>
+                </div>
+
+                <div class="form-group">
+                    <label for="email">Địa chỉ Email:</label>
+                    <input type="email" id="email" class="form-control" maxlength="100" placeholder="example@gmail.com" required>
+                    <span class="error-text" id="emailError"></span>
+                </div>
+
+                <div class="form-group">
+                    <label for="password">Mật khẩu:</label>
+                    <div class="input-wrapper">
+                        <input type="password" id="password" class="form-control" maxlength="64" placeholder="Nhập mật khẩu..." required>
+                        <button type="button" id="togglePassBtn" class="toggle-pass">Hiện</button>
+                    </div>
+                    <div class="pass-rules">
+                        <strong>Yêu cầu mật khẩu:</strong>
+                        <ul>
+                            <li id="ruleLength">&bull; Ít nhất 8 ký tự</li>
+                            <li id="ruleUpper">&bull; Có ít nhất 1 chữ in hoa (A-Z)</li>
+                            <li id="ruleLower">&bull; Có ít nhất 1 chữ thường (a-z)</li>
+                            <li id="ruleNumber">&bull; Có ít nhất 1 chữ số (0-9)</li>
+                        </ul>
+                    </div>
+                    <span class="error-text" id="passError"></span>
+                </div>
+
+                <div class="checkbox-group">
+                    <input type="checkbox" id="agreeTerms">
+                    <label for="agreeTerms">Tôi đồng ý điều khoản sử dụng và chính sách bảo mật.</label>
+                </div>
+                <span class="error-text" id="termsError"></span>
+
+                <button type="submit" class="btn-submit">Đăng ký</button>
+            </form>
+
+            <div id="successBox" class="success-box" role="status"></div>
+        </section>
+
+        <section class="storage-preview">
+            <h3>Dữ liệu đã lưu trong LocalStorage (mật khẩu đã băm SHA-256):</h3>
+            <ul id="storageList" class="storage-list">
+                <li>Chưa có tài khoản nào được lưu.</li>
+            </ul>
+        </section>
+    </main>
+
+    <footer>
+        Lê Thái Bình &bull; MSSV: 241A010692 &bull; Học phần Lập trình Web
+    </footer>
+
+    <script>
+        const registerForm = document.getElementById("registerForm");
+        const fullNameInput = document.getElementById("fullName");
+        const emailInput = document.getElementById("email");
+        const passwordInput = document.getElementById("password");
+        const agreeTermsInput = document.getElementById("agreeTerms");
+        const togglePassBtn = document.getElementById("togglePassBtn");
+
+        const nameError = document.getElementById("nameError");
+        const emailError = document.getElementById("emailError");
+        const passError = document.getElementById("passError");
+        const termsError = document.getElementById("termsError");
+        const successBox = document.getElementById("successBox");
+        const storageList = document.getElementById("storageList");
+
+        const ruleLength = document.getElementById("ruleLength");
+        const ruleUpper = document.getElementById("ruleUpper");
+        const ruleLower = document.getElementById("ruleLower");
+        const ruleNumber = document.getElementById("ruleNumber");
+
+        togglePassBtn.addEventListener("click", function () {
+            const isHidden = passwordInput.type === "password";
+            passwordInput.type = isHidden ? "text" : "password";
+            togglePassBtn.textContent = isHidden ? "Ẩn" : "Hiện";
+        });
+
+        function checkPasswordRules(pwd) {
+            const hasLength = pwd.length >= 8;
+            const hasUpper = /[A-Z]/.test(pwd);
+            const hasLower = /[a-z]/.test(pwd);
+            const hasNumber = /[0-9]/.test(pwd);
+
+            ruleLength.className = hasLength ? "ok" : "";
+            ruleUpper.className = hasUpper ? "ok" : "";
+            ruleLower.className = hasLower ? "ok" : "";
+            ruleNumber.className = hasNumber ? "ok" : "";
+
+            return hasLength && hasUpper && hasLower && hasNumber;
+        }
+
+        passwordInput.addEventListener("input", function () {
+            checkPasswordRules(passwordInput.value);
+        });
+
+        async function hashPassword(plainText) {
+            if (window.crypto && window.crypto.subtle) {
+                const encoder = new TextEncoder();
+                const data = encoder.encode(plainText);
+                const hashBuffer = await window.crypto.subtle.digest("SHA-256", data);
+                const hashArray = Array.from(new Uint8Array(hashBuffer));
+                return hashArray.map(b => b.toString(16).padStart(2, "0")).join("");
+            }
+            let hash = 0;
+            for (let i = 0; i < plainText.length; i++) {
+                hash = ((hash << 5) - hash) + plainText.charCodeAt(i);
+                hash |= 0;
+            }
+            return "hash_" + Math.abs(hash).toString(16);
+        }
+
+        function renderSavedUsers() {
+            const users = JSON.parse(localStorage.getItem("bt35a_users") || "[]");
+            storageList.innerHTML = "";
+            if (users.length === 0) {
+                const li = document.createElement("li");
+                li.textContent = "Chưa có tài khoản nào được lưu.";
+                storageList.appendChild(li);
+                return;
+            }
+            users.forEach(function (u) {
+                const li = document.createElement("li");
+                li.textContent = "Tên: " + u.fullName + " | Email: " + u.email + " | Mật khẩu (SHA-256): " + u.passwordHash.slice(0, 16) + "...";
+                storageList.appendChild(li);
+            });
+        }
+
+        registerForm.addEventListener("submit", async function (e) {
+            e.preventDefault();
+            successBox.style.display = "none";
+
+            const cleanName = fullNameInput.value.trim();
+            const cleanEmail = emailInput.value.trim().toLowerCase();
+            const rawPassword = passwordInput.value;
+            const isAgreed = agreeTermsInput.checked;
+
+            let isValid = true;
+
+            if (cleanName.length < 2) {
+                nameError.textContent = "Vui lòng nhập họ và tên (ít nhất 2 ký tự).";
+                fullNameInput.classList.add("invalid");
+                fullNameInput.classList.remove("valid");
+                isValid = false;
+            } else {
+                nameError.textContent = "";
+                fullNameInput.classList.remove("invalid");
+                fullNameInput.classList.add("valid");
+            }
+
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
+            if (!emailRegex.test(cleanEmail)) {
+                emailError.textContent = "Địa chỉ email không đúng định dạng hợp lệ.";
+                emailInput.classList.add("invalid");
+                emailInput.classList.remove("valid");
+                isValid = false;
+            } else {
+                emailError.textContent = "";
+                emailInput.classList.remove("invalid");
+                emailInput.classList.add("valid");
+            }
+
+            if (!checkPasswordRules(rawPassword)) {
+                passError.textContent = "Mật khẩu phải từ 8 ký tự, gồm chữ hoa, chữ thường và số.";
+                passwordInput.classList.add("invalid");
+                passwordInput.classList.remove("valid");
+                isValid = false;
+            } else {
+                passError.textContent = "";
+                passwordInput.classList.remove("invalid");
+                passwordInput.classList.add("valid");
+            }
+
+            if (!isAgreed) {
+                termsError.textContent = "Bạn phải tích chọn Đồng ý điều khoản trước khi đăng ký.";
+                isValid = false;
+            } else {
+                termsError.textContent = "";
+            }
+
+            if (!isValid) return;
+
+            const passwordHash = await hashPassword(rawPassword);
+            const users = JSON.parse(localStorage.getItem("bt35a_users") || "[]");
+
+            const existingIndex = users.findIndex(u => u.email === cleanEmail);
+            const userRecord = {
+                fullName: cleanName,
+                email: cleanEmail,
+                passwordHash: passwordHash,
+                registeredAt: new Date().toLocaleString("vi-VN")
+            };
+
+            if (existingIndex >= 0) {
+                users[existingIndex] = userRecord;
+            } else {
+                users.push(userRecord);
+            }
+
+            localStorage.setItem("bt35a_users", JSON.stringify(users));
+            renderSavedUsers();
+
+            successBox.innerHTML = "";
+            const titleEl = document.createElement("strong");
+            titleEl.textContent = "Đăng ký thành công!";
+            const msgEl = document.createElement("span");
+            msgEl.textContent = "Đã lưu thông tin tài khoản của " + cleanName + " (" + cleanEmail + ") vào LocalStorage.";
+            successBox.appendChild(titleEl);
+            successBox.appendChild(msgEl);
+            successBox.style.display = "block";
+        });
+
+        renderSavedUsers();
+    </script>
+</body>
+</html>

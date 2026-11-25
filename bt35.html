@@ -1,0 +1,447 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bài tập 35 - Danh sách sản phẩm | Lê Thái Bình - 241A010692</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        body {
+            background-color: #f1f5f9;
+            color: #0f172a;
+            line-height: 1.6;
+        }
+        header {
+            background: linear-gradient(135deg, #0f172a 0%, #1e3a8a 100%);
+            color: #ffffff;
+            text-align: center;
+            padding: 28px 16px;
+        }
+        header h1 {
+            font-size: 26px;
+            margin-bottom: 6px;
+        }
+        header p {
+            color: #cbd5e1;
+            font-size: 15px;
+        }
+        .badge {
+            display: inline-block;
+            margin-top: 10px;
+            padding: 5px 14px;
+            background-color: rgba(56, 189, 248, 0.18);
+            border: 1px solid #38bdf8;
+            border-radius: 999px;
+            color: #7dd3fc;
+            font-weight: 600;
+            font-size: 14px;
+        }
+        main {
+            max-width: 1100px;
+            margin: 28px auto;
+            padding: 0 16px;
+        }
+        .search-panel {
+            background-color: #ffffff;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(15, 23, 42, 0.06);
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            align-items: center;
+            margin-bottom: 24px;
+        }
+        .search-panel input {
+            flex: 1;
+            min-width: 240px;
+            padding: 12px 16px;
+            border: 1.5px solid #cbd5e1;
+            border-radius: 8px;
+            font-size: 15px;
+            transition: border-color 0.2s;
+        }
+        .search-panel input:focus {
+            outline: none;
+            border-color: #0284c7;
+        }
+        .btn {
+            padding: 12px 20px;
+            border: none;
+            border-radius: 8px;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+        .btn-primary {
+            background-color: #0284c7;
+            color: #ffffff;
+        }
+        .btn-primary:hover {
+            background-color: #0369a1;
+        }
+        .btn-secondary {
+            background-color: #e2e8f0;
+            color: #1e293b;
+        }
+        .btn-secondary:hover {
+            background-color: #cbd5e1;
+        }
+        .result-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+            font-size: 15px;
+            color: #475569;
+            font-weight: 600;
+        }
+        .error-box {
+            display: none;
+            background-color: #fef2f2;
+            border: 1.5px solid #f87171;
+            color: #b91c1c;
+            padding: 18px 20px;
+            border-radius: 10px;
+            text-align: center;
+            font-weight: 600;
+            margin-bottom: 24px;
+        }
+        .product-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+        }
+        .product-card {
+            background-color: #ffffff;
+            border: 1px solid #e2e8f0;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 12px rgba(15, 23, 42, 0.05);
+            display: flex;
+            flex-direction: column;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        .product-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 10px 20px rgba(15, 23, 42, 0.1);
+        }
+        .product-thumb {
+            height: 150px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 48px;
+            font-weight: bold;
+            color: #ffffff;
+        }
+        .product-body {
+            padding: 18px;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+        .product-category {
+            display: inline-block;
+            width: fit-content;
+            font-size: 12px;
+            font-weight: 700;
+            text-transform: uppercase;
+            padding: 3px 10px;
+            border-radius: 6px;
+            background-color: #e0f2fe;
+            color: #0369a1;
+            margin-bottom: 8px;
+        }
+        .product-title {
+            font-size: 18px;
+            font-weight: 700;
+            color: #0f172a;
+            margin-bottom: 6px;
+        }
+        .product-desc {
+            font-size: 14px;
+            color: #475569;
+            margin-bottom: 14px;
+        }
+        .product-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-top: 12px;
+            border-top: 1px solid #f1f5f9;
+        }
+        .product-price {
+            font-size: 17px;
+            font-weight: 700;
+            color: #dc2626;
+        }
+        .product-stock {
+            font-size: 13px;
+            font-weight: 600;
+            color: #16a34a;
+        }
+        footer {
+            text-align: center;
+            padding: 20px;
+            margin-top: 36px;
+            background-color: #0f172a;
+            color: #94a3b8;
+            font-size: 14px;
+        }
+    
+        .top-nav {
+            width: 100%;
+            background-color: #1e3a8a;
+            padding: 10px 12px;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 10px;
+        }
+        .top-nav a {
+            color: #ffffff;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 600;
+            padding: 6px 12px;
+            border-radius: 6px;
+            background-color: rgba(255, 255, 255, 0.12);
+        }
+        .top-nav a:hover, .top-nav a.active {
+            background-color: #0284c7;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>BÀI TẬP 35 - DANH SÁCH SẢN PHẨM CÔNG NGHỆ</h1>
+        <p>Tìm kiếm động bằng JavaScript &bull; Giao diện Responsive CSS Grid</p>
+        <div class="badge">Sinh viên: Lê Thái Bình | MSSV: 241A010692</div>
+    </header>
+    <nav class="top-nav">
+        <a href="index.html">Trang chủ</a>
+        <a href="241A010692_bt36.html">Bài tập 36</a>
+        <a href="bt34.html">Bài tập 34</a>
+        <a href="bt35.html" class="active">Bài tập 35</a>
+        <a href="bt35a.html">Bài tập 35a</a>
+        <a href="bt35b.html">Bài tập 35b</a>
+        <a href="cauhoi8.html">Câu hỏi 8</a>
+    </nav>
+
+    <main>
+        <div class="search-panel">
+            <input type="text" id="searchInput" maxlength="100" placeholder="Nhập tên sản phẩm cần tìm (ví dụ: Laptop, Chuột, Bàn phím...)">
+            <button type="button" id="searchBtn" class="btn btn-primary">Tìm kiếm</button>
+            <button type="button" id="resetBtn" class="btn btn-secondary">Hiển thị tất cả</button>
+        </div>
+
+        <div class="result-bar">
+            <span id="countText">Đang hiển thị 6 sản phẩm</span>
+        </div>
+
+        <div id="errorBox" class="error-box" role="alert"></div>
+
+        <section id="productGrid" class="product-grid"></section>
+    </main>
+
+    <footer>
+        Lê Thái Bình &bull; MSSV: 241A010692 &bull; Học phần Lập trình Web
+    </footer>
+
+    <script>
+        const products = [
+            {
+                id: 1,
+                name: "Laptop Asus VivoBook 15 OLED",
+                category: "Laptop",
+                price: 15490000,
+                desc: "Intel Core i5-1135G7, RAM 16GB, SSD 512GB NVMe, màn hình Full HD sắc nét.",
+                color: "linear-gradient(135deg, #1e3a8a, #3b82f6)",
+                code: "LAPTOP"
+            },
+            {
+                id: 2,
+                name: "Điện thoại Redmi Turbo 4 Pro",
+                category: "Smartphone",
+                price: 8290000,
+                desc: "Snapdragon 8s Gen 4, màn hình AMOLED 120Hz, pin dung lượng cao sạc nhanh.",
+                color: "linear-gradient(135deg, #0f766e, #14b8a6)",
+                code: "PHONE"
+            },
+            {
+                id: 3,
+                name: "Tay cầm chơi game BSP-D10S",
+                category: "Phụ kiện Gaming",
+                price: 590000,
+                desc: "Hỗ trợ đa nền tảng Android, PC X-Input, Switch, tích hợp con quay hồi chuyển.",
+                color: "linear-gradient(135deg, #4338ca, #6366f1)",
+                code: "GAMEPAD"
+            },
+            {
+                id: 4,
+                name: "Bàn phím cơ không dây Keychron K2",
+                category: "Bàn phím",
+                price: 1850000,
+                desc: "Layout 75% nhỏ gọn, switch cơ học gõ êm, kết nối Bluetooth 5.1 và cáp Type-C.",
+                color: "linear-gradient(135deg, #b45309, #f59e0b)",
+                code: "KEYBOARD"
+            },
+            {
+                id: 5,
+                name: "Chuột không dây Logitech G304 Lightspeed",
+                category: "Chuột máy tính",
+                price: 790000,
+                desc: "Cảm biến HERO 12.000 DPI chính xác cao, độ trễ 1ms, trọng lượng nhẹ 99g.",
+                color: "linear-gradient(135deg, #be123c, #f43f5e)",
+                code: "MOUSE"
+            },
+            {
+                id: 6,
+                name: "Màn hình LG UltraGear 24 inch 144Hz",
+                category: "Màn hình",
+                price: 3490000,
+                desc: "Tấm nền IPS 1ms, tần số quét 144Hz mượt mà, hỗ trợ FreeSync chống xé hình.",
+                color: "linear-gradient(135deg, #334155, #64748b)",
+                code: "MONITOR"
+            }
+        ];
+
+        const searchInput = document.getElementById("searchInput");
+        const searchBtn = document.getElementById("searchBtn");
+        const resetBtn = document.getElementById("resetBtn");
+        const productGrid = document.getElementById("productGrid");
+        const errorBox = document.getElementById("errorBox");
+        const countText = document.getElementById("countText");
+
+        function formatVND(amount) {
+            return amount.toLocaleString("vi-VN") + " ₫";
+        }
+
+        function normalizeText(str) {
+            return str
+                .trim()
+                .toLowerCase()
+                .normalize("NFD")
+                .replace(/[̀-ͯ]/g, "")
+                .replace(/đ/g, "d");
+        }
+
+        function renderProducts(list, rawKeyword) {
+            productGrid.innerHTML = "";
+
+            if (list.length === 0) {
+                errorBox.style.display = "block";
+                errorBox.textContent = 'Không tìm thấy sản phẩm nào phù hợp với từ khóa: "' + rawKeyword + '"';
+                countText.textContent = "Tìm thấy 0 sản phẩm";
+                return;
+            }
+
+            errorBox.style.display = "none";
+            errorBox.textContent = "";
+            countText.textContent = "Đang hiển thị " + list.length + " sản phẩm";
+
+            const fragment = document.createDocumentFragment();
+
+            list.forEach(function (item) {
+                const card = document.createElement("article");
+                card.className = "product-card";
+
+                const thumb = document.createElement("div");
+                thumb.className = "product-thumb";
+                thumb.style.background = item.color;
+                thumb.textContent = item.code;
+
+                const body = document.createElement("div");
+                body.className = "product-body";
+
+                const topInfo = document.createElement("div");
+
+                const cat = document.createElement("span");
+                cat.className = "product-category";
+                cat.textContent = item.category;
+
+                const title = document.createElement("h2");
+                title.className = "product-title";
+                title.textContent = item.name;
+
+                const desc = document.createElement("p");
+                desc.className = "product-desc";
+                desc.textContent = item.desc;
+
+                topInfo.appendChild(cat);
+                topInfo.appendChild(title);
+                topInfo.appendChild(desc);
+
+                const footer = document.createElement("div");
+                footer.className = "product-footer";
+
+                const price = document.createElement("span");
+                price.className = "product-price";
+                price.textContent = formatVND(item.price);
+
+                const stock = document.createElement("span");
+                stock.className = "product-stock";
+                stock.textContent = "Còn hàng";
+
+                footer.appendChild(price);
+                footer.appendChild(stock);
+
+                body.appendChild(topInfo);
+                body.appendChild(footer);
+
+                card.appendChild(thumb);
+                card.appendChild(body);
+                fragment.appendChild(card);
+            });
+
+            productGrid.appendChild(fragment);
+        }
+
+        function handleSearch() {
+            const rawInput = searchInput.value.trim().slice(0, 100);
+            if (rawInput === "") {
+                renderProducts(products, "");
+                return;
+            }
+
+            const keyword = normalizeText(rawInput);
+            const filtered = products.filter(function (product) {
+                return normalizeText(product.name).includes(keyword);
+            });
+
+            renderProducts(filtered, rawInput);
+        }
+
+        let debounceTimer = null;
+        searchInput.addEventListener("input", function () {
+            clearTimeout(debounceTimer);
+            debounceTimer = setTimeout(handleSearch, 200);
+        });
+
+        searchInput.addEventListener("keydown", function (e) {
+            if (e.key === "Enter") {
+                e.preventDefault();
+                clearTimeout(debounceTimer);
+                handleSearch();
+            }
+        });
+
+        searchBtn.addEventListener("click", handleSearch);
+
+        resetBtn.addEventListener("click", function () {
+            searchInput.value = "";
+            renderProducts(products, "");
+        });
+
+        renderProducts(products, "");
+    </script>
+</body>
+</html>

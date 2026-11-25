@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Câu hỏi 08 - Lý thuyết JavaScript | Lê Thái Bình - 241A010692</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        body {
+            background-color: #f1f5f9;
+            color: #0f172a;
+            line-height: 1.65;
+        }
+        header {
+            background: linear-gradient(135deg, #0f172a 0%, #1e3a8a 100%);
+            color: #ffffff;
+            text-align: center;
+            padding: 24px 16px;
+        }
+        header h1 {
+            font-size: 24px;
+            margin-bottom: 6px;
+        }
+        header p {
+            color: #cbd5e1;
+            font-size: 14px;
+        }
+        
+        .top-nav {
+            width: 100%;
+            background-color: #1e3a8a;
+            padding: 10px 12px;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 10px;
+        }
+        .top-nav a {
+            color: #ffffff;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 600;
+            padding: 6px 12px;
+            border-radius: 6px;
+            background-color: rgba(255, 255, 255, 0.12);
+        }
+        .top-nav a:hover, .top-nav a.active {
+            background-color: #0284c7;
+        }
+
+        main {
+            max-width: 920px;
+            margin: 28px auto;
+            padding: 0 16px;
+        }
+        .q-card {
+            background-color: #ffffff;
+            border: 1px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 22px 24px;
+            margin-bottom: 18px;
+            box-shadow: 0 4px 12px rgba(15, 23, 42, 0.05);
+        }
+        .q-card h2 {
+            font-size: 18px;
+            color: #0284c7;
+            margin-bottom: 10px;
+        }
+        .q-card ul {
+            padding-left: 20px;
+            margin-top: 6px;
+        }
+        .q-card li {
+            margin-bottom: 6px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+            font-size: 14px;
+        }
+        th, td {
+            border: 1px solid #cbd5e1;
+            padding: 10px;
+            text-align: left;
+            vertical-align: top;
+        }
+        th {
+            background-color: #0f172a;
+            color: #ffffff;
+        }
+        pre {
+            background-color: #0f172a;
+            color: #e2e8f0;
+            padding: 12px 14px;
+            border-radius: 8px;
+            overflow-x: auto;
+            margin-top: 10px;
+            font-size: 13.5px;
+        }
+        .btn-back {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: #0284c7;
+            color: #ffffff;
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: 600;
+            margin-bottom: 24px;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>CÂU HỎI 08 - LÝ THUYẾT JAVASCRIPT</h1>
+        <p>Sinh viên: <strong>Lê Thái Bình</strong> | MSSV: <strong>241A010692</strong></p>
+    </header>
+    <nav class="top-nav">
+        <a href="index.html">Trang chủ</a>
+        <a href="241A010692_bt36.html">Bài tập 36</a>
+        <a href="bt34.html">Bài tập 34</a>
+        <a href="bt35.html">Bài tập 35</a>
+        <a href="bt35a.html">Bài tập 35a</a>
+        <a href="bt35b.html">Bài tập 35b</a>
+        <a href="cauhoi8.html" class="active">Câu hỏi 8</a>
+    </nav>
+
+    <main>
+        <section class="q-card">
+            <h2>1. JavaScript là gì? Nó được dùng để làm gì trong thiết kế web?</h2>
+            <p><strong>Khái niệm:</strong> JavaScript (JS) là ngôn ngữ lập trình kịch bản thông dịch, đa mẫu hình (hướng sự kiện, hướng đối tượng dựa trên prototype), chạy trực tiếp trên trình duyệt web và cả phía máy chủ (Node.js). Cùng với HTML và CSS, JS là một trong ba công nghệ nền tảng của Web.</p>
+            <ul>
+                <li><strong>Tạo tính tương tác động:</strong> Xử lý sự kiện chuột, bàn phím, cuộn trang, menu thả xuống, slider ảnh.</li>
+                <li><strong>Thao tác DOM theo thời gian thực:</strong> Thêm, sửa, xóa phần tử HTML và thay đổi CSS mà không cần tải lại trang.</li>
+                <li><strong>Kiểm tra dữ liệu biểu mẫu (Form Validation):</strong> Xác thực dữ liệu nhập tại trình duyệt trước khi gửi lên máy chủ.</li>
+                <li><strong>Giao tiếp bất đồng bộ:</strong> Sử dụng AJAX / Fetch API để cập nhật dữ liệu nền mượt mà.</li>
+                <li><strong>Lưu trữ dữ liệu &amp; ứng dụng web:</strong> Dùng LocalStorage, SessionStorage, phát triển SPA và mini game web.</li>
+            </ul>
+        </section>
+
+        <section class="q-card">
+            <h2>2. Các kiểu dữ liệu chính trong JavaScript là những kiểu nào?</h2>
+            <p>JavaScript chia thành 2 nhóm với 8 kiểu dữ liệu cơ bản (ES6+):</p>
+            <ul>
+                <li><strong>7 kiểu dữ liệu nguyên thủy (Primitive):</strong> <code>Number</code>, <code>BigInt</code>, <code>String</code>, <code>Boolean</code>, <code>Undefined</code>, <code>Null</code>, <code>Symbol</code>.</li>
+                <li><strong>1 kiểu dữ liệu tham chiếu (Reference):</strong> <code>Object</code> (bao gồm cả <code>Array</code>, <code>Function</code>, <code>Date</code>, <code>RegExp</code>, <code>Map</code>, <code>Set</code>).</li>
+            </ul>
+        </section>
+
+        <section class="q-card">
+            <h2>3. Sự khác biệt giữa var, let và const trong JavaScript là gì?</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Tiêu chí</th>
+                        <th>var</th>
+                        <th>let</th>
+                        <th>const</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>Phạm vi (Scope)</strong></td>
+                        <td>Function Scope hoặc Global Scope.</td>
+                        <td>Block Scope (trong cặp ngoặc nhọn <code>{ }</code>).</td>
+                        <td>Block Scope (trong cặp ngoặc nhọn <code>{ }</code>).</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Gán lại giá trị</strong></td>
+                        <td>Cho phép gán lại giá trị mới.</td>
+                        <td>Cho phép gán lại giá trị mới.</td>
+                        <td>Không cho phép gán lại (hằng số), bắt buộc gán giá trị khi khai báo.</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Khai báo lại cùng tên</strong></td>
+                        <td>Cho phép trong cùng phạm vi.</td>
+                        <td>Không cho phép (<code>SyntaxError</code>).</td>
+                        <td>Không cho phép (<code>SyntaxError</code>).</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Hoisting</strong></td>
+                        <td>Hoisted và gán mặc định <code>undefined</code>.</td>
+                        <td>Hoisted nhưng nằm trong Temporal Dead Zone (<code>ReferenceError</code> nếu dùng trước).</td>
+                        <td>Hoisted nhưng nằm trong Temporal Dead Zone (<code>ReferenceError</code> nếu dùng trước).</td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+
+        <section class="q-card">
+            <h2>4. JavaScript có phải là ngôn ngữ lập trình đơn luồng không? Giải thích ngắn gọn.</h2>
+            <p><strong>Trả lời:</strong> Có, JavaScript là ngôn ngữ lập trình <strong>đơn luồng (Single-threaded)</strong>.</p>
+            <p><strong>Giải thích:</strong> Engine thực thi JS (như V8) chỉ có duy nhất một Call Stack nên tại một thời điểm chỉ thực thi tuần tự từng câu lệnh một. Để không làm treo giao diện khi chạy các tác vụ chờ (gọi API, <code>setTimeout</code>), JS kết hợp Web APIs của trình duyệt, hàng đợi Callback/Microtask Queue và cơ chế <strong>Event Loop</strong> để xử lý bất đồng bộ (Non-blocking).</p>
+        </section>
+
+        <section class="q-card">
+            <h2>5. Hàm (toán tử) delete trong JavaScript có tác dụng gì?</h2>
+            <p>Toán tử <code>delete</code> dùng để xóa một thuộc tính (cả key và value) khỏi đối tượng (<code>Object</code>). Trả về <code>true</code> nếu xóa thành công hoặc thuộc tính không tồn tại; trả về <code>false</code> nếu thuộc tính không thể xóa. Khi dùng trên mảng (<code>delete arr[i]</code>), phần tử bị xóa để lại khoảng trống <code>undefined</code> và không làm thay đổi <code>arr.length</code>.</p>
+            <pre>const sinhVien = { hoTen: "Lê Thái Bình", mssv: "241A010692", lop: "CNTT" };
+delete sinhVien.lop; // true
+console.log(sinhVien); // { hoTen: "Lê Thái Bình", mssv: "241A010692" }</pre>
+        </section>
+
+        <a href="index.html" class="btn-back">&larr; Quay về Trang chủ (index.html)</a>
+    </main>
+</body>
+</html>

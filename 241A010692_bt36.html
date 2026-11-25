@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bài tập 36 - Mini game Hứng Táo | Lê Thái Bình - 241A010692</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        body {
+            background-color: #e2e8f0;
+            margin: 0;
+            padding: 0 0 24px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        
+        .top-nav {
+            width: 100%;
+            background-color: #1e3a8a;
+            padding: 10px 12px;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 10px;
+        }
+        .top-nav a {
+            color: #ffffff;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 600;
+            padding: 6px 12px;
+            border-radius: 6px;
+            background-color: rgba(255, 255, 255, 0.12);
+        }
+        .top-nav a:hover, .top-nav a.active {
+            background-color: #0284c7;
+        }
+
+        .header-info {
+            text-align: center;
+            margin: 16px 0 12px;
+        }
+        .header-info h1 {
+            margin: 0 0 6px;
+            color: #0f172a;
+            font-size: 24px;
+        }
+        .header-info p {
+            margin: 0;
+            color: #334155;
+            font-weight: 600;
+        }
+        .hud {
+            width: 500px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: #ffffff;
+            padding: 10px 18px;
+            border-radius: 10px;
+            margin-bottom: 12px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+            font-size: 17px;
+            font-weight: bold;
+        }
+        .hud span.score-box {
+            color: #0284c7;
+        }
+        .hud span.lives-box {
+            color: #dc2626;
+        }
+        #start-btn {
+            background-color: #16a34a;
+            color: #ffffff;
+            border: none;
+            padding: 8px 18px;
+            border-radius: 6px;
+            font-size: 15px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+        #start-btn:hover {
+            background-color: #15803d;
+        }
+        #game-container {
+            width: 500px;
+            height: 400px;
+            border-radius: 12px;
+            background-color: #f0f9ff;
+            border: 3px solid #0284c7;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 6px 18px rgba(15, 23, 42, 0.15);
+        }
+        #apple {
+            width: 32px;
+            height: 32px;
+            background-color: #ef4444;
+            border-radius: 50%;
+            position: absolute;
+            top: 0px;
+            left: 234px;
+            box-shadow: inset -4px -4px 0 #b91c1c;
+        }
+        #apple::before {
+            content: "";
+            position: absolute;
+            top: -6px;
+            left: 14px;
+            width: 4px;
+            height: 8px;
+            background-color: #78350f;
+            border-radius: 2px;
+        }
+        #apple::after {
+            content: "";
+            position: absolute;
+            top: -6px;
+            left: 17px;
+            width: 10px;
+            height: 6px;
+            background-color: #22c55e;
+            border-radius: 6px 0 6px 0;
+        }
+        #basket {
+            width: 90px;
+            height: 28px;
+            background-color: #92400e;
+            border: 2px solid #451a03;
+            border-radius: 4px 4px 14px 14px;
+            position: absolute;
+            bottom: 8px;
+            left: 205px;
+        }
+        #game-over-banner {
+            display: none;
+            position: absolute;
+            inset: 0;
+            background-color: rgba(15, 23, 42, 0.8);
+            color: #ffffff;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            z-index: 10;
+        }
+        #game-over-banner h2 {
+            font-size: 36px;
+            color: #f87171;
+            margin: 0 0 10px;
+        }
+        #game-over-banner p {
+            font-size: 18px;
+            margin: 0 0 16px;
+        }
+        .controls-hint {
+            margin-top: 12px;
+            font-size: 14px;
+            color: #475569;
+        }
+    </style>
+</head>
+<body>
+    <nav class="top-nav">
+        <a href="index.html">Trang chủ</a>
+        <a href="241A010692_bt36.html" class="active">Bài tập 36</a>
+        <a href="bt34.html">Bài tập 34</a>
+        <a href="bt35.html">Bài tập 35</a>
+        <a href="bt35a.html">Bài tập 35a</a>
+        <a href="bt35b.html">Bài tập 35b</a>
+        <a href="cauhoi8.html">Câu hỏi 8</a>
+    </nav>
+
+    <div class="header-info">
+        <h1>MINI GAME HỨNG TÁO - BÀI TẬP 36</h1>
+        <p>Sinh viên: Lê Thái Bình | MSSV: 241A010692</p>
+    </div>
+
+    <div class="hud">
+        <span class="score-box">Điểm số: <span id="score">0</span></span>
+        <span class="lives-box">Mạng sống: <span id="lives">3</span></span>
+        <button id="start-btn" type="button">Bắt đầu</button>
+    </div>
+
+    <div id="game-container">
+        <div id="apple"></div>
+        <div id="basket"></div>
+        <div id="game-over-banner">
+            <h2>Game Over</h2>
+            <p id="final-score-text">Điểm của bạn: 0</p>
+            <button type="button" id="restart-btn" style="padding: 8px 18px; background: #0284c7; color: #fff; border: none; border-radius: 6px; font-weight: bold; cursor: pointer;">Chơi lại</button>
+        </div>
+    </div>
+
+    <p class="controls-hint">Sử dụng phím mũi tên Trái (&larr;) và Phải (&rarr;) để di chuyển giỏ hứng táo.</p>
+
+    <script>
+        const gameContainer = document.getElementById('game-container');
+        const basket = document.getElementById('basket');
+        const apple = document.getElementById('apple');
+        const scoreEl = document.getElementById('score');
+        const livesEl = document.getElementById('lives');
+        const startBtn = document.getElementById('start-btn');
+        const restartBtn = document.getElementById('restart-btn');
+        const gameOverBanner = document.getElementById('game-over-banner');
+        const finalScoreText = document.getElementById('final-score-text');
+
+        const containerWidth = 500;
+        const containerHeight = 400;
+        const basketWidth = 90;
+        const basketHeight = 28;
+        const basketBottomOffset = 8;
+        const appleSize = 32;
+
+        let basketX = (containerWidth - basketWidth) / 2;
+        let appleX = Math.floor(Math.random() * (containerWidth - appleSize));
+        let appleY = 0;
+        let score = 0;
+        let lives = 3;
+        let fallSpeed = 2.5;
+        let isRunning = false;
+        let animationId = null;
+
+        function resetApple() {
+            appleY = 0;
+            appleX = Math.floor(Math.random() * (containerWidth - appleSize));
+            apple.style.top = appleY + 'px';
+            apple.style.left = appleX + 'px';
+        }
+
+        function updateBasketPosition() {
+            if (basketX < 0) basketX = 0;
+            if (basketX > containerWidth - basketWidth) {
+                basketX = containerWidth - basketWidth;
+            }
+            basket.style.left = basketX + 'px';
+        }
+
+        document.addEventListener('keydown', function (e) {
+            if (e.key === 'ArrowLeft') {
+                e.preventDefault();
+                if (!isRunning) return;
+                basketX -= 25;
+                updateBasketPosition();
+            } else if (e.key === 'ArrowRight') {
+                e.preventDefault();
+                if (!isRunning) return;
+                basketX += 25;
+                updateBasketPosition();
+            }
+        });
+
+        function endGame() {
+            isRunning = false;
+            cancelAnimationFrame(animationId);
+            finalScoreText.textContent = 'Điểm của bạn: ' + score;
+            gameOverBanner.style.display = 'flex';
+            alert('Game Over! Điểm số của bạn là: ' + score);
+        }
+
+        function gameLoop() {
+            if (!isRunning) return;
+
+            appleY += fallSpeed;
+            apple.style.top = appleY + 'px';
+
+            const basketTop = containerHeight - basketBottomOffset - basketHeight;
+            const basketBottom = containerHeight - basketBottomOffset;
+            const basketLeft = basketX;
+            const basketRight = basketX + basketWidth;
+
+            const appleTop = appleY;
+            const appleBottom = appleY + appleSize;
+            const appleLeft = appleX;
+            const appleRight = appleX + appleSize;
+
+            const isColliding =
+                appleBottom >= basketTop &&
+                appleTop <= basketBottom &&
+                appleRight >= basketLeft &&
+                appleLeft <= basketRight;
+
+            if (isColliding) {
+                score += 1;
+                scoreEl.textContent = score;
+                fallSpeed += 0.3;
+                resetApple();
+            } else if (appleBottom >= containerHeight) {
+                lives -= 1;
+                livesEl.textContent = lives;
+                if (lives <= 0) {
+                    livesEl.textContent = 0;
+                    endGame();
+                    return;
+                }
+                resetApple();
+            }
+
+            animationId = requestAnimationFrame(gameLoop);
+        }
+
+        function startGame() {
+            cancelAnimationFrame(animationId);
+            score = 0;
+            lives = 3;
+            fallSpeed = 2.5;
+            basketX = (containerWidth - basketWidth) / 2;
+            scoreEl.textContent = score;
+            livesEl.textContent = lives;
+            gameOverBanner.style.display = 'none';
+            updateBasketPosition();
+            resetApple();
+            isRunning = true;
+            animationId = requestAnimationFrame(gameLoop);
+        }
+
+        startBtn.addEventListener('click', startGame);
+        restartBtn.addEventListener('click', startGame);
+    </script>
+</body>
+</html>
